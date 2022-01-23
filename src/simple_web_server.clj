@@ -23,7 +23,7 @@
 
 (defn handler [serve-from-dir request]
   ;; for security it would be good to strip the uri chars to a small white list.
-  (let [uri-raw (:uri request)
+  (let [uri-raw (java.net.URLDecoder/decode (:uri request))
         uri (if (= uri-raw "/") "/index.html" uri-raw)
         file (clojure.java.io/file (str serve-from-dir "/" uri))]
     (if (clojure.string/includes? uri "..")
