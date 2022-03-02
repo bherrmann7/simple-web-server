@@ -2,9 +2,11 @@
 
 (ns simple-web-server
   (:gen-class)
-  (:require [ring.adapter.jetty]
+  (:require 
             [clojure.java.io]
+            [ring.adapter.jetty]
             [clojure.string]))
+
 
 (defn respond-with [content-type body]
   {:status 200
@@ -35,7 +37,9 @@
 
 (defn start [serve-from-dir]
   (println "Listenting for web connections at :3000  serving from" serve-from-dir)
-  (ring.adapter.jetty/run-jetty #(handler serve-from-dir %1) {:port 3000 :join? true}))
+;; exposing https ...  
+;;  (ring.adapter.jetty/run-jetty #(handler serve-from-dir %1) {:join? true :port 3000 :ssl-port 3443 :keystore "keystore" :key-password "blablabla" }))
+  (ring.adapter.jetty/run-jetty #(handler serve-from-dir %1) {:join? true :port 3000 }))
 
 (defn -main [& _]
   (start "."))

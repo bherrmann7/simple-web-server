@@ -2,3 +2,6 @@
 .nrepl-port
 pub
 target
+.clj-kondo
+.lsp
+keystore
