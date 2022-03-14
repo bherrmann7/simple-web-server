@@ -2,11 +2,10 @@
 
 (ns simple-web-server
   (:gen-class)
-  (:require 
-            [clojure.java.io]
-            [ring.adapter.jetty]
-            [clojure.string]))
-
+  (:require
+   [clojure.java.io]
+   [ring.adapter.jetty]
+   [clojure.string]))
 
 (defn respond-with [content-type body]
   {:status 200
@@ -35,14 +34,21 @@
           (respond-with content-type file))
         (respond-with "text/html" (str "File not found: " uri))))))
 
-(defn start [serve-from-dir]
-  (println "Listenting for web connections at :3000  serving from" serve-from-dir)
-;; exposing https ...  
-;;  (ring.adapter.jetty/run-jetty #(handler serve-from-dir %1) {:join? true :port 3000 :ssl-port 3443 :keystore "keystore" :key-password "blablabla" }))
-  (ring.adapter.jetty/run-jetty #(handler serve-from-dir %1) {:join? true :port 3000 }))
+(defn start [serve-from-dir keystore-filename keystore-password]
+  (let [isSSL (and  keystore-filename keystore-password)
+        _ (println "isSSL" isSSL)
+        jetty-config (if isSSL
+                       {:port 3000 :ssl-port 3443 :keystore keystore-filename :key-password keystore-password}
+                       {:port 3000})]
+    (println "Listening at http 3000, serving from" serve-from-dir)
+    (if isSSL
+      (println "  Also listening at https 3443") nil)
+    (ring.adapter.jetty/run-jetty #(handler serve-from-dir %1) jetty-config)))
 
-(defn -main [& _]
-  (start "."))
+(defn -main [& args]
+  (let [keystore-filename (first args)
+        keystore-password (second args)]
+    (start "." keystore-filename keystore-password)))
 
 ;; (-main)
 
