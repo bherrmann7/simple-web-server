@@ -18,6 +18,7 @@
     (case extension
       ".css" "text/css"
       ".js" "text/javascript"
+      ".json" "application/json"
       ".yml" "text/x-yaml"
       ".html" "text/html"
       "image/jpeg")))
