@@ -21,7 +21,12 @@
       ".json" "application/json"
       ".yml" "text/x-yaml"
       ".html" "text/html"
-      "image/jpeg")))
+      ".txt" "text/text"
+      ".jpg" "image/jpeg"
+      ".png" "image/png"
+      ".ico" "image/x-icon"
+      "application/octet-stream"
+      )))
 
 (defn handler [serve-from-dir request]
   ;; for security it would be good to strip the uri chars to a small white list.
